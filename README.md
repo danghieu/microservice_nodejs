@@ -8,10 +8,28 @@ Install CLI globally with
 > ``npm install -g sequelize-cli``
 
  1. MIGRATION
+
+Migration database movie service
+
 > ``cd movie_service/database``
 
-> ``sequelize model:generate --name User --attributes firstName:string,lastName:string,email:string``
+> ``sequelize db:migrate``
+
+Migration database genre service
+
+> ``cd genre_service/database``
 
 > ``sequelize db:migrate``
+
+ 2. RUN APP
+
+- MOVIE SERVICE
+> ``npm run start_movie_service``
+
+- GENRE SERVICE
+> ``npm run start_genre_service``
+
+- UI SITE
+> ``npm run start_ui_site``
 
 
