@@ -1,13 +1,15 @@
 ![alt text](https://cdn.rawgit.com/rikkeisoft-dn/microservice_nodejs/8eedf4d7/ui_site/public/img/movie_microservice.png
 )
 
-**DATABASE**
+Install Node Package
+
+> ``npm install``
 
 Install CLI globally with
 
 > ``npm install -g sequelize-cli``
 
- 1. MIGRATION
+ 1. MIGRATION DATABASE
 
 Migration database movie service
 
