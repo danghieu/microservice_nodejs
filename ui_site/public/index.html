@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MicroServices DEMO</title>
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/skeleton.css">
+</head>
+<body ng-controller="bodyCtr">
+<div class="container">
+  <h3>MicroServices With Nodejs</h3>
+  <img src="img/movie_microservice.png" width="400px" height="250px" />
+  <p><h5>CREATE OBJECT WITH GENRE SERVICE</h5></p>
+  <form>
+    <div class="row">
+      <div class="six columns">
+        <label>Genre name</label>
+        <input class="u-full-width" type="text" placeholder="" ng-model="genre.name" required>
+        <p>
+          <button class="button button-primary" ng-click="onSaveGenre()" ng-disabled="onDisabled.genre"><span ng-show="!onDisabled.genre">save</span><span ng-show="onDisabled.genre">saving...</span></button>
+        </p>
+      </div>
+      <div class="six columns">
+        <table class="u-full-width">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Genre Name</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="genre_render in listGenre">
+            <td ng-bind="genre_render.id"></td>
+            <td ng-bind="genre_render.name"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </form>
+  <hr>
+  <h5>CREATE OBJECT WITH MOVIE SERVICE</h5>
+  <form>
+    <div class="row">
+      <div class="six columns">
+        <label>Name</label>
+        <input class="u-full-width" type="text" placeholder="" ng-model="movie.name">
+      </div>
+      <div class="six columns">
+        <label>Genre</label>
+        <select class="u-full-width" ng-model="movie.genre">
+          <option value="">Please select a genre</option>
+          <option ng-repeat="option in listGenre" value="{{option.id}}">{{option.name}}</option>
+        </select>
+      </div>
+    </div>
+    <label>URL</label>
+    <input class="u-full-width" type="text" placeholder="" ng-model="movie.url">
+    <button class="button button-primary" ng-click="onSaveMovie()" ng-disabled="onDisabled.movie"><span ng-show="!onDisabled.movie">save</span><span ng-show="onDisabled.movie">saving...</span></button>
+  </form>
+  <div class="row">
+    <table class="u-full-width">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Genre Name</th>
+        <th>URL</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="movie_render in listMovie">
+        <td ng-bind="movie_render.id"></td>
+        <td ng-bind="movie_render.name"></td>
+        <td ng-bind="movie_render.genre_name"></td>
+        <td ng-bind="movie_render.url"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="/script/angular.min.js"></script>
+<script>
+
+  var app = angular.module("app", []);
+  app.controller('bodyCtr', function($scope, $http) {
+
+    //get list genre
+    $scope.listGenre=[];
+    function getListGenre(){
+      var req = {
+        method: 'GET',
+        url: 'http://localhost:2002/genre',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      $http(req).then(function(res){
+        $scope.listGenre= res.data.data;
+      }, function(err){
+        alert("something is has error");
+      });
+    }
+    getListGenre();
+    //get list genre
+
+    $scope.movie={
+      name: '',
+      genre: '',
+      url: ''
+    };
+
+    $scope.genre={
+      name: ""
+    };
+    $scope.onDisabled={
+      genre: false,
+      movie: false
+    };
+    $scope.onSaveGenre= function () {
+      if(!$scope.genre.name){
+        alert("please input genre name");
+        return false;
+      }
+      $scope.onDisabled.genre= true;
+      var req = {
+        method: 'POST',
+        url: 'http://localhost:2002/genre',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: $scope.genre
+      };
+
+      $http(req).then(function(res){
+        $scope.onDisabled.genre= false;
+        $scope.genre={
+          name: ""
+        };
+        getListGenre();
+      }, function(err){
+        $scope.onDisabled.genre= false;
+        alert("something is has error");
+      });
+    };
+    
+    $scope.onSaveMovie= function () {
+      if(!$scope.movie.name){
+        alert("please input name");
+        return false;
+      }
+      if(!$scope.movie.genre){
+        alert("please choose a genre");
+        return false;
+      }
+      if(!$scope.movie.url){
+        alert("please input url");
+        return false;
+      }
+      $scope.onDisabled.movie= true;
+      var req = {
+        method: 'POST',
+        url: 'http://localhost:2001/movie',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: $scope.movie
+      };
+
+      $http(req).then(function(res){
+        $scope.onDisabled.movie= false;
+        $scope.movie={
+          name: '',
+          genre: '',
+          url: ''
+        };
+        getListMovie();
+      }, function(err){
+        $scope.onDisabled.movie= false;
+        alert("something is has error");
+      });
+    };
+
+    //get list genre
+    $scope.listMovie=[];
+    function getListMovie(){
+      var req = {
+        method: 'GET',
+        url: 'http://localhost:2001/movie',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      $http(req).then(function(res){
+        $scope.listMovie= res.data.data;
+      }, function(err){
+        alert("something is has error");
+      });
+    }
+    getListMovie();
+    //get list genre
+  });
+</script>
+</body>
+</html>
