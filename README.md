@@ -1,6 +1,10 @@
 ![alt text](https://cdn.rawgit.com/rikkeisoft-dn/microservice_nodejs/8eedf4d7/ui_site/public/img/movie_microservice.png
 )
 
+REQUIRE:
+ * PostgreSQL
+ * Database: movie_microservice, genre_microservice
+
 Install Node Package
 
 > ``npm install``
