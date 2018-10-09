@@ -4,10 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
-const configJson = require( './../config/config.json');
+const configJson = require( './../config/config.js');
 var config;
 
- config = configJson;
+ config = configJson.db;
 
 const db = {};
 

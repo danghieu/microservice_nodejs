@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+    mysql:
+        image: mysql:5.6
+        volumes:
+            - "./database/mysql:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    postgresql:
+        image: postgres
+        volumes:
+            - ./database/postgresql:/var/lib/postgresql
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+    node:
+        build: .
+        ports:
+            - "2001:2001"
+            - "2002:2002"
+            - "2003:2003"
+        volumes:
+            - .:/app
+        environment:
+            MYSQL_HOST: mysql
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PORT: ${MYSQL_PORT}
+            MYSQL_DRIVER: ${MYSQL_DRIVER}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            POSTGRES_HOST: postgresql
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PORT: ${POSTGRES_PORT}
+            POSTGRES_DRIVER: ${POSTGRES_DRIVER}
+            POSTGRES_DB: ${POSTGRES_DB}
+        depends_on:
+            - mysql
+            - postgresql
+        command: npm start

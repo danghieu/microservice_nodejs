@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "concurrently \"node movie_service/server.js\" \"node genre_service/server.js\" \"node ui_site/server.js\"",
     "start_movie_service": "node movie_service/server.js",
     "start_genre_service": "node genre_service/server.js",
     "start_ui_site": "node ui_site/server.js"
@@ -13,11 +14,14 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
+    "concurrently": "^4.0.1",
     "express": "^4.16.3",
+    "mysql2": "^1.6.1",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "sequelize": "^4.39.0"
+    "sequelize": "^4.39.0",
+    "tedious": "^2.6.4"
   }
 }
